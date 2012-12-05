@@ -2,29 +2,6 @@
 """setup.py: Django django-company-registration"""
 
 from distutils.core import setup
-import os
-
-# compile the list of packages available, because distutils doesn't have an easy way to do this
-packages, data_files = [], []
-root_dir = os.path.dirname(__file__)
-if root_dir:
-    os.chdir(root_dir)
-
-for dirpath, dirnames, filenames in os.walk('company_registration'):
-    # ignore dirnames that start with '.'
-    for i, dirname in enumerate(dirnames):
-        if dirname.startswith('.'):
-            del dirnames[i]
-    if '__init__.py' in filenames:
-        pkg = dirpath.replace(os.path.sep, '.')
-        if os.path.altsep:
-            pkg = pkg.replace(os.path.altsep, '.')
-        packages.append(pkg)
-    elif filenames:
-        # strip 'company_registration/' or 'company_registration\'
-        prefix = dirpath[21:]
-        for f in filenames:
-            data_files.append(os.path.join(prefix, f))
 
 setup(name='django-company-registration',
       version='1.0',
@@ -33,9 +10,7 @@ setup(name='django-company-registration',
       author='Steven Klass',
       author_email='sklass@pivotalenergysolutions.com',
       url='https://github.com/pivotal-energy-solutions/django-company-registration',
-      package_dir={'company_registration': 'company_registration'},
-      packages=packages,
-      package_data={'company_registration': data_files},
+      license='lgpl',
       classifiers=[
            'Development Status :: 2 - Pre-Alpha',
            'Environment :: Web Environment',
@@ -46,4 +21,6 @@ setup(name='django-company-registration',
            'Programming Language :: Python',
            'Topic :: Software Development',
       ],
+      packages=['company_registration'],
+      requires=['django (>=1.2)',],
 )
