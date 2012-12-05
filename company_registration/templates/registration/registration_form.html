@@ -1,0 +1,148 @@
+{% extends "registration/registration_base.html" %}
+{% block title %}Register for an account{% endblock %}
+
+{% block javascript_head %}
+    <script>
+        jQuery.validator.setDefaults({debug:false, success:"jvf_valid"});
+        jQuery.validator.addMethod("alphanumeric", function(value, element) {
+        	return this.optional(element) || /^\w+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        $(document).ready(function () {
+            $("#myform").validate({
+                  rules:{
+                      {% if form.first_name.field.required %}first_name:
+                          {required:true},{% endif %}
+                      {% if form.last_name.field.required %}last_name:
+                          {required:true},{% endif %}
+                      {% if form.email.field.required %}email:
+                          {required:true},{% endif %}
+                      {% if form.title.field.required %}title:
+                          {required:true},{% endif %}
+                      {% if form.work_phone.field.required %}work_phone:
+                          {required:true},{% endif %}
+                      username:{required:true, minlength:4, alphanumeric:true},
+                      csrfmiddlewaretoken:{required:true}
+                  }
+              });
+        });
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <form id='myform' method='post' action=''>{% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="span-17 last">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% if debug and form.errors %}
+            <div class="span-17 last">{{ form.errors }}</div>
+        {% endif %}
+
+        <div class="span-3">Username
+            {% if form.username.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.username }}</div>
+        {% if form.username.errors %}
+            <div class="span-18 last">{{ form.username.errors }}</div>{% endif %}
+
+        <div class="span-3">First Name
+            {% if form.first_name.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.first_name }}</div>
+        {% if form.first_name.errors %}
+            <div class="span-18 last">{{ form.first_name.errors }}</div>{% endif %}
+
+        <div class="span-3">Last Name
+            {% if form.last_name.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.last_name }}</div>
+        {% if form.last_name.errors %}
+            <div class="span-18 last">{{ form.last_name.errors }}</div>{% endif %}
+
+        <div class="span-3">Email
+            {% if form.email.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.email }}</div>
+        {% if form.email.errors %}
+            <div class="span-18 last">{{ form.email.errors }}</div>{% endif %}
+
+        <div class="span-3">Title
+            {% if form.title.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.title }}</div>
+        {% if form.title.errors %}
+            <div class="span-18 last">{{ form.title.errors }}</div>{% endif %}
+
+        <div class="span-3">Work Phone
+            {% if form.work_phone.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.work_phone }}</div>
+        {% if form.work_phone.errors %}
+            <div class="span-18 last">{{ form.work_phone.errors }}</div>{% endif %}
+
+        {% if request.user.profile.company.company_type == 'rater' %}
+            <div class="span-3">Rater Role
+                {% if form.rater_role.field.required %}
+                    <span class="special_class">*</span>
+                {% endif %}
+            </div>
+            <div class="span-15 last">{{ form.rater_role }}</div>
+            {% if form.rater_role.errors %}
+                <div class="span-18 last">{{ form.rater_role.errors }}</div>{% endif %}
+
+            <div class="span-3">Rater ID
+                {% if form.rater_id.field.required %}
+                    <span class="special_class">*</span>
+                {% endif %}
+            </div>
+            <div class="span-15 last">{{ form.rater_id }}</div>
+            {% if form.rater_id.errors %}
+                <div class="span-18 last">{{ form.rater_id.errors }}</div>{% endif %}
+        {% endif %}
+        <div class="span-15 last">&nbsp;</div>
+
+        <hr/>
+        <div class="span-3">Department
+            {% if form.department.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.department }}</div>
+        {% if form.department.errors %}
+            <div class="span-18 last">{{ form.department.errors }}</div>{% endif %}
+
+        <div class="span-3">Cell Phone
+            {% if form.cell_phone.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.cell_phone }}</div>
+        {% if form.cell_phone.errors %}
+            <div class="span-18 last">{{ form.cell_phone.errors }}</div>{% endif %}
+
+        <div class="span-3">Photo
+            {% if form.photo.field.required %}
+                <span class="special_class">*</span>
+            {% endif %}
+        </div>
+        <div class="span-15 last">{{ form.photo }}</div>
+        {% if form.photo.errors %}
+            <div class="span-18 last">{{ form.photo.errors }}</div>{% endif %}
+
+        <div class="span-15 last">&nbsp;</div>
+        <div class="span-15 last"><input type="submit" value="Send activation email"/></div>
+    </form>
+{% endblock %}
