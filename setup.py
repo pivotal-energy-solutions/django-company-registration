@@ -21,8 +21,8 @@ for dirpath, dirnames, filenames in os.walk('company_registration'):
             pkg = pkg.replace(os.path.altsep, '.')
         packages.append(pkg)
     elif filenames:
-        # strip 'simple_history/' or 'simple_history\'
-        prefix = dirpath[15:]
+        # strip 'company_registration/' or 'company_registration\'
+        prefix = dirpath[21:]
         for f in filenames:
             data_files.append(os.path.join(prefix, f))
 
