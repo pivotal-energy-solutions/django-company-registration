@@ -1,15 +1,15 @@
 Welcome to {{ site.name }}!
 
 This automated email message is being sent to you on behalf of you Axis company administrator
-{{ admin.get_full_name }}, who has initiated the registration process to add an account for you on
+{{ requesting_user.get_full_name }}, who has initiated the registration process to add an account for you on
 {{ site.name }}.  If you believe that you have received this email in error, simply ignore
-this email or contact {{admin.first_name}} at {{admin.profile.work_phone}} for clarification.
+this email or contact {{requesting_user.first_name}} at {{requesting_user.profile.work_phone}} for clarification.
 
 You may log into Axis using your email address ({{user.email}}).
 
 To set your password and activate your account, please click the following link within the next {{ expiration_days }} days:
 
-https://{{site.domain}}/accounts/activate/{{ activation_key }}
+http{% if is_secure %}s{% endif %}://{{site.domain}}/accounts/activate/{{ activation_key }}
 
 Sincerely,
 The Axis Support Team

@@ -1,11 +1,11 @@
 {% extends "registration/registration_base.html" %}
-{% block title %}Register for an account{% endblock %}
+{% block page_title %}Register a new user account{% endblock %}
 
 {% block javascript_head %}
     <script>
         jQuery.validator.setDefaults({debug:false, success:"jvf_valid"});
         jQuery.validator.addMethod("alphanumeric", function(value, element) {
-        	return this.optional(element) || /^\w+$/i.test(value);
+        	return this.optional(element) || /^\w+-$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         $(document).ready(function () {
@@ -21,7 +21,6 @@
                           {required:true},{% endif %}
                       {% if form.work_phone.field.required %}work_phone:
                           {required:true},{% endif %}
-                      username:{required:true, minlength:4, alphanumeric:true},
                       csrfmiddlewaretoken:{required:true}
                   }
               });
@@ -39,14 +38,24 @@
             <div class="span-17 last">{{ form.errors }}</div>
         {% endif %}
 
-        <div class="span-3">Username
-            {% if form.username.field.required %}
+
+{#        <div class="span-3">Username#}
+{#            {% if form.username.field.required %}#}
+{#                <span class="special_class">*</span>#}
+{#            {% endif %}#}
+{#        </div>#}
+{#        <div class="span-15 last">{{ form.username }}</div>#}
+{#        {% if form.username.errors %}#}
+{#            <div class="span-18 last">{{ form.username.errors }}</div>{% endif %}#}
+
+        <div class="span-3">Company
+            {% if form.company.field.required %}
                 <span class="special_class">*</span>
             {% endif %}
         </div>
-        <div class="span-15 last">{{ form.username }}</div>
-        {% if form.username.errors %}
-            <div class="span-18 last">{{ form.username.errors }}</div>{% endif %}
+        <div class="span-15 last">{{ form.company }}</div>
+        {% if form.company.errors %}
+            <div class="span-18 last">{{ form.company.errors }}</div>{% endif %}
 
         <div class="span-3">First Name
             {% if form.first_name.field.required %}
