@@ -2,14 +2,13 @@
 """managers.py: Django company_registration"""
 
 import logging
-import string
 import random
 from hashlib import sha1
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-import signals
 
+from signals import user_registered, user_activated
 
 __author__ = 'Steven Klass'
 __date__ = '12/10/12 1:38 PM'
@@ -31,7 +30,7 @@ class RegistrationManager(models.Manager):
             registration_profile.send_activation_email(**kwargs)
         return new_user
 
-    def activate_user(self, activation_key):
+    def activate_user(self, activation_key, request=None):
         """returns user object if successful, otherwise returns false"""
         try:
             profile = self.get(activation_key=activation_key)
@@ -43,6 +42,7 @@ class RegistrationManager(models.Manager):
             user.save()
             profile.activation_key = self.model.ACTIVATED
             profile.save()
+            user_activated.send(sender=self.__class__, user=user, request=request)
             return user
         return False
 
@@ -62,12 +62,14 @@ class RegistrationManager(models.Manager):
         new_user, create = User.objects.get_or_create(
             email=kwargs.get('email'),
             defaults=dict(username=username, is_active=False,
-                          first_name=kwargs.get('first_name'), last_name=kwargs.get('last_name')))
+                          first_name=kwargs.get('first_name'),
+                          last_name=kwargs.get('last_name')))
         new_user.set_unusable_password()
         new_user.groups.add(kwargs.get('company').group)
         new_user.save()
 
-        signals.user_registered.send(sender=self.__class__)
+        user_registered.send(sender=self.__class__, user=new_user,
+                             request=kwargs.pop('request', None))
 
         profile = new_user.get_profile()
         profile.company = kwargs.get('company')

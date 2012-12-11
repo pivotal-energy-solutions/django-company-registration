@@ -2,14 +2,6 @@
 """views.py: Django registration"""
 
 import logging
-#from django.contrib import messages
-#from django.contrib.auth.decorators import login_required
-#from django.contrib.auth.views import password_change
-#from django.http import Http404
-#from registration.views import register
-#from .forms import SetPasswordFormTOS, RegistrationProfileForm
-
-from django import http
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_change
@@ -19,11 +11,10 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
-from apps.community.views import CommunityListView
 from apps.generics.decorators import permission_required_with_403
 
+from company_registration.models import RegistrationProfile
 from company_registration import forms
-from company_registration import models
 from company_registration import get_site
 
 from apps.company.models import Company
@@ -69,7 +60,8 @@ class Register(FormView):
         form.cleaned_data['site'] = get_site(self.request)
         form.cleaned_data['is_secure'] = self.request.is_secure()
         form.cleaned_data['requesting_user'] = self.request.user
-        models.RegistrationProfile.objects.create_inactive_user(**form.cleaned_data)
+        form.cleaned_data['request'] = self.request
+        RegistrationProfile.objects.create_inactive_user(**form.cleaned_data)
         return super(Register, self).form_valid(form)
 
 class RegistrationComplete(TemplateView):
@@ -84,8 +76,9 @@ class Activate(TemplateView):
     template_name = 'registration/activation_failed.html'
 
     def get(self, request, *args, **kwargs):
-        new_user = models.RegistrationProfile.objects.activate_user(kwargs['activation_key'])
+        new_user = RegistrationProfile.objects.activate_user(kwargs['activation_key'], request)
         if new_user:
+            # Log the user in and set their password
             new_user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_user)
             return HttpResponseRedirect(reverse('password_set'))
