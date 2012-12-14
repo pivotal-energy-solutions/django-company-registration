@@ -32,7 +32,7 @@ class Register(FormView):
     form_class = forms.CompanyRegistrationForm
 
     @method_decorator(login_required)
-    @method_decorator(permission_required_with_403('user.add_user'))
+    @method_decorator(permission_required_with_403('auth.add_user'))
     def dispatch(self, *args, **kwargs):
         """Ensure we have access"""
         return super(Register, self).dispatch(*args, **kwargs)
@@ -46,7 +46,7 @@ class Register(FormView):
         kwargs = super(Register, self).get_form_kwargs()
         comps = Company.objects.filter_by_company(self.request.user.company, include_self=True)
         if not self.request.user.is_superuser:
-            comps = comps.filter(Q(is_customer=False)|Q(company=self.request.user.company))
+            comps = comps.filter(Q(is_customer=False)|Q(id=self.request.user.company.id))
         kwargs['company_qs'] = comps
         return kwargs
 
