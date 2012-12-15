@@ -70,3 +70,4 @@ class SetPasswordFormTOS(SetPasswordForm):
         if self.cleaned_data.get('tos', False):
             return self.cleaned_data['tos']
         raise forms.ValidationError(_(u'You must agree to the terms to register'))
+

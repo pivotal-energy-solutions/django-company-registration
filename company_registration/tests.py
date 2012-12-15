@@ -110,7 +110,7 @@ class CompanyRegistrationTests(TestCase):
 
         redirect_url = re.search("(?P<url>https?://[^\s]+)", str(response)).group("url")
         self.assertTrue(url in redirect_url)
-        self.assertTrue(reverse('auth_login') in redirect_url)
+        self.assertTrue(reverse('login') in redirect_url)
 
     def test_registration(self):
         """
@@ -252,7 +252,7 @@ class CompanyRegistrationTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         new_url = re.search("(?P<url>https?://[^\s]+)", str(response)).group("url")
-        self.assertTrue(reverse('profile_update') in new_url)
+        self.assertTrue(reverse('profiles_edit_profile') in new_url)
 
     def test_registration_signal(self):
         """

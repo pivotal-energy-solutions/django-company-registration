@@ -25,12 +25,12 @@
     </script>
 {% endblock %}
 
-<form id="myform" method="post" action="{% url django.contrib.auth.views.login %}">{% csrf_token %}
+<form id="myform" method="post" action="{% url login %}">{% csrf_token %}
     <div class="span-5"><label for="{{ form.username.auto_id }}">Email</label></div>
     <div class="span-13 last">{{ form.username }}</div>
     <div class="span-5">{{ form.password.label_tag }}</div>
     <div class="span-13 last">{{ form.password }}</div>
-<p><a href="{% url auth_password_reset %}">Forgot</a> your password?  Contact your company administrator for access or <a href="mailto://support@pivotalenergy.net">send us an email</a>.</p>
+<p><a href="{% url django.contrib.auth.views.password_reset %}">Forgot</a> your password?  Contact your company administrator for access or <a href="mailto://support@pivotalenergy.net">send us an email</a>.</p>
 
 <input type="submit" value="login" />
 <input type="hidden" name="next" value="{{ next }}" />

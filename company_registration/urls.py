@@ -3,7 +3,7 @@
 
 import logging
 from django.conf.urls import patterns, url
-from company_registration import views, auth_urls
+from company_registration import views
 
 __author__ = 'Steven Klass'
 __date__ = '4/3/12 8:59 PM'
@@ -12,7 +12,7 @@ __credits__ = ['Steven Klass', ]
 
 log = logging.getLogger(__name__)
 
-registration_urls = patterns('',
+urlpatterns = patterns('',
     url(r'^register/$', views.Register.as_view(),
         name='registration_register'),
     url(r'^register/complete/$', views.RegistrationComplete.as_view(),
@@ -23,5 +23,3 @@ registration_urls = patterns('',
         name='registration_activate'),
     url(r'^password_set/$', views.password_set, name='password_set'),
 )
-
-urlpatterns = registration_urls + auth_urls.urlpatterns

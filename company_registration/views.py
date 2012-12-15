@@ -89,5 +89,5 @@ class Activate(TemplateView):
 def password_set(request, **kwargs):
     kwargs['template_name'] = "registration/password_set_form.html"
     kwargs['password_change_form'] = forms.SetPasswordFormTOS
-    kwargs['post_change_redirect'] = reverse('profile_update')
+    kwargs['post_change_redirect'] = reverse('profiles_edit_profile')
     return password_change(request, **kwargs)
