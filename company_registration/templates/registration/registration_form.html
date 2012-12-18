@@ -38,16 +38,6 @@
             <div class="span-17 last">{{ form.errors }}</div>
         {% endif %}
 
-
-{#        <div class="span-3">Username#}
-{#            {% if form.username.field.required %}#}
-{#                <span class="special_class">*</span>#}
-{#            {% endif %}#}
-{#        </div>#}
-{#        <div class="span-15 last">{{ form.username }}</div>#}
-{#        {% if form.username.errors %}#}
-{#            <div class="span-18 last">{{ form.username.errors }}</div>{% endif %}#}
-
         <div class="span-3">Company
             {% if form.company.field.required %}
                 <span class="special_class">*</span>
@@ -103,56 +93,77 @@
             <div class="span-18 last">{{ form.work_phone.errors }}</div>{% endif %}
 
         {% if request.user.profile.company.company_type == 'rater' %}
-            <div class="span-3">Rater Role
-                {% if form.rater_role.field.required %}
-                    <span class="special_class">*</span>
-                {% endif %}
-            </div>
-            <div class="span-15 last">{{ form.rater_role }}</div>
-            {% if form.rater_role.errors %}
-                <div class="span-18 last">{{ form.rater_role.errors }}</div>{% endif %}
+            <div class="span-18 last" id="rater_info">
+                <div class="span-3">Rater Role
+                    {% if form.rater_role.field.required %}
+                        <span class="special_class">*</span>
+                    {% endif %}
+                </div>
+                <div class="span-15 last">{{ form.rater_role }}</div>
+                {% if form.rater_role.errors %}
+                    <div class="span-18 last">{{ form.rater_role.errors }}</div>{% endif %}
 
-            <div class="span-3">Rater ID
-                {% if form.rater_id.field.required %}
-                    <span class="special_class">*</span>
-                {% endif %}
+                <div class="span-3">Rater ID
+                    {% if form.rater_id.field.required %}
+                        <span class="special_class">*</span>
+                    {% endif %}
+                </div>
+                <div class="span-15 last">{{ form.rater_id }}</div>
+                {% if form.rater_id.errors %}
+                    <div class="span-18 last">{{ form.rater_id.errors }}</div>{% endif %}
             </div>
-            <div class="span-15 last">{{ form.rater_id }}</div>
-            {% if form.rater_id.errors %}
-                <div class="span-18 last">{{ form.rater_id.errors }}</div>{% endif %}
         {% endif %}
         <div class="span-15 last">&nbsp;</div>
 
-        <hr/>
-        <div class="span-3">Department
-            {% if form.department.field.required %}
-                <span class="special_class">*</span>
-            {% endif %}
-        </div>
-        <div class="span-15 last">{{ form.department }}</div>
-        {% if form.department.errors %}
-            <div class="span-18 last">{{ form.department.errors }}</div>{% endif %}
+        <div class="span-18 last" id="misc_info">
+            <hr/>
+            <div class="span-3">Department
+                {% if form.department.field.required %}
+                    <span class="special_class">*</span>
+                {% endif %}
+            </div>
+            <div class="span-15 last">{{ form.department }}</div>
+            {% if form.department.errors %}
+                <div class="span-18 last">{{ form.department.errors }}</div>{% endif %}
 
-        <div class="span-3">Cell Phone
-            {% if form.cell_phone.field.required %}
-                <span class="special_class">*</span>
-            {% endif %}
+            <div class="span-3">Cell Phone
+                {% if form.cell_phone.field.required %}
+                    <span class="special_class">*</span>
+                {% endif %}
+            </div>
+            <div class="span-15 last">{{ form.cell_phone }}</div>
+            {% if form.cell_phone.errors %}
+                <div class="span-18 last">{{ form.cell_phone.errors }}</div>{% endif %}
         </div>
-        <div class="span-15 last">{{ form.cell_phone }}</div>
-        {% if form.cell_phone.errors %}
-            <div class="span-18 last">{{ form.cell_phone.errors }}</div>{% endif %}
-
-{#        <div class="span-3">Photo#}
-{#            {% if form.photo.field.required %}#}
-{#                <span class="special_class">*</span>#}
-{#            {% endif %}#}
-{#        </div>#}
-{#        <div class="span-15 last">{{ form.photo }}</div>#}
-{#        {% if form.photo.errors %}#}
-{#            <div class="span-18 last">{{ form.photo.errors }}</div>{% endif %}#}
 
         <div class="span-18 last">&nbsp;</div>
         <div class="span-15 last">&nbsp;</div>
         <div class="span-15 last"><input type="submit" value="Send activation email"/></div>
     </form>
 {% endblock %}
+
+{% block javascript_tail %}
+
+    <script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script style="text/javascript">
+        $(document).ready(function() {
+            $("#id_company").change(function () {
+                var company_id = $('#id_company :selected').val();
+                if ( company_id == {{ request.user.company.id }} ) {
+                    $('input[type=submit]').val("Send Registration Email");
+                    {% if request.user.profile.company.company_type == 'rater' %}
+                        $('#rater_info').show();
+                    {% endif %}
+                    $('#misc_info').show();
+                } else {
+                    $('input[type=submit]').val("Add User");
+                    {% if request.user.profile.company.company_type == 'rater' %}
+                        $('#rater_info').hide();
+                    {% endif %}
+                    $('#misc_info').hide();
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
