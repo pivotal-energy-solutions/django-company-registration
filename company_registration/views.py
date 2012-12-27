@@ -2,12 +2,16 @@
 """views.py: Django registration"""
 
 import logging
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import password_change
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
@@ -85,9 +89,32 @@ class Activate(TemplateView):
         return super(Activate, self).get(request, *args, **kwargs)
 
 
-@login_required
-def password_set(request, **kwargs):
-    kwargs['template_name'] = "registration/password_set_form.html"
-    kwargs['password_change_form'] = forms.SetPasswordFormTOS
-    kwargs['post_change_redirect'] = reverse('profiles_edit_profile')
-    return password_change(request, **kwargs)
+class PasswordSetTOS(FormView):
+    """Class based set password and agree to TOS"""
+    form_class = forms.SetPasswordFormTOS
+    token_generator = default_token_generator
+    template_name = "registration/password_set_form.html"
+
+    @method_decorator(login_required)
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        """Ensure we have access"""
+        return super(PasswordSetTOS, self).dispatch(*args, **kwargs)
+
+    def get_form(self, form_class):
+        """
+        Returns an instance of the form to be used in this view.
+        """
+        return form_class(user=self.request.user, **self.get_form_kwargs())
+
+    def form_valid(self, form):
+        """Save the password then give the user permissions"""
+        form.save()
+        self.request.user.profile.save()
+        messages.success(self.request, u'Your password has been set and permissions have been set!')
+        return super(PasswordSetTOS, self).form_valid(form)
+
+    def get_success_url(self):
+        """Return them to update their profile"""
+        return reverse('profiles_edit_profile')

@@ -1,4 +1,6 @@
 {% extends "html_email_base.html" %}
+{% load url from future %}
+
 {% block content %}
     <h4>Welcome to {{ site.name }}!</h4>
 
@@ -18,7 +20,7 @@
         next {{ expiration_days }} days:<br />
 
         <div style="text-align: center">
-            <a href="http{% if is_secure %}s{% endif %}://{{site.domain}}/accounts/activate/{{ activation_key }}">
+            <a href="http{% if is_secure %}s{% endif %}://{{site.domain}}{% url "registration_activate" activation_key=activation_key %}">
             <strong>Click Here</strong></a>
         </div>
 
