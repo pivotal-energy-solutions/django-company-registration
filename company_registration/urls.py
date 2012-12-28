@@ -9,7 +9,7 @@ from company_registration.views import PasswordSetTOS
 
 __author__ = 'Steven Klass'
 __date__ = '4/3/12 8:59 PM'
-__copyright__ = 'Copyright 2012 7Stalks Consulting. All rights reserved.'
+__copyright__ = 'Copyright 2012-2013 Pivotal Energy Solutions. All rights reserved.'
 __credits__ = ['Steven Klass', ]
 
 log = logging.getLogger(__name__)
