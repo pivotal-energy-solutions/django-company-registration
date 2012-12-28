@@ -5,7 +5,7 @@ __author__ = 'Steven Klass'
 __version_info__ = (0, 1, 0)
 __version__ = '.'.join(map(str, __version_info__))
 __date__ = '3/28/12 12:55 PM'
-__copyright__ = 'Copyright 2012 7Stalks Consulting. All rights reserved.'
+__copyright__ = 'Copyright 2012-2013 Pivotal Energy Solutions. All rights reserved.'
 __credits__ = ['Steven Klass', ]
 __license__ = 'See the file LICENSE.txt for licensing information.'
 

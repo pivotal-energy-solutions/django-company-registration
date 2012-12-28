@@ -10,7 +10,7 @@ from models import RegistrationProfile
 
 __author__ = 'Steven Klass'
 __date__ = '12/11/12 10:48 AM'
-__copyright__ = 'Copyright 2012 7Stalks Consulting. All rights reserved.'
+__copyright__ = 'Copyright 2012-2013 Pivotal Energy Solutions. All rights reserved.'
 __credits__ = ['Steven Klass', ]
 
 log = logging.getLogger(__name__)
