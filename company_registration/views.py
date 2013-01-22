@@ -54,10 +54,11 @@ class Register(FormView):
         kwargs['company_qs'] = comps
         return kwargs
 
-    def get_success_url(self):
-        if self.success_url:
-            return self.success_url
-        return reverse("registration_complete")
+    def get_success_url(self, company=None):
+
+        if company.id == self.request.user.company.id:
+            return reverse("registration_complete")
+        return reverse('company_view', kwargs={'type': company.company_type, 'pk': company.id})
 
     def form_valid(self, form):
         # activate user...
@@ -66,7 +67,7 @@ class Register(FormView):
         form.cleaned_data['requesting_user'] = self.request.user
         form.cleaned_data['request'] = self.request
         RegistrationProfile.objects.create_inactive_user(**form.cleaned_data)
-        return super(Register, self).form_valid(form)
+        return HttpResponseRedirect(self.get_success_url(form.cleaned_data.get('company')))
 
 class RegistrationComplete(TemplateView):
     template_name = 'registration/registration_complete.html'
