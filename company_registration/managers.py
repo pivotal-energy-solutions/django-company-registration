@@ -55,10 +55,13 @@ class RegistrationManager(models.Manager):
 
     def _get_new_inactive_user(self, **kwargs):
         """Create a new inactive user with a profile"""
-        username = slugify(kwargs.get('email').split("@", 1)[0][:25])
-        users = User.objects.filter(username=username).count()
-        if users > 0:
-            username += str(users + 1)
+        slug_username = slugify(kwargs.get('email').split("@", 1)[0][:25])
+        users = User.objects.filter(username=slug_username).count()
+        while True:
+            username = slug_username + str(users)
+            if not User.objects.filter(username=username).count():
+                break
+            users += 1
         new_user, create = User.objects.get_or_create(
             email=kwargs.get('email'),
             defaults=dict(username=username, is_active=False,
