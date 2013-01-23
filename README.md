@@ -1,7 +1,6 @@
 #Django Company Registration *(django-company-registration)*
 ----------------------------
 
-
 ## Description
 
 This app simply gives a backend which allows admins to subscribe users to their company.  This is
