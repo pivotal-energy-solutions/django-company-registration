@@ -5,7 +5,7 @@ import logging
 from celery.schedules import crontab
 from celery.task.base import periodic_task
 from company_registration.models import RegistrationProfile
-from django.contrib.localflavor import settings
+from django.conf import settings
 
 
 __author__ = 'Steven Klass'
