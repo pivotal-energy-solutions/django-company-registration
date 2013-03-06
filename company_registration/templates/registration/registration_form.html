@@ -163,6 +163,20 @@
                     $('#misc_info').hide();
                 }
             });
+            var company_id = $('#id_company :selected').val();
+            if ( company_id == {{ request.user.company.id }} ) {
+                $('input[type=submit]').val("Send Registration Email");
+                {% if request.user.profile.company.company_type == 'rater' %}
+                    $('#rater_info').show();
+                {% endif %}
+                $('#misc_info').show();
+            } else {
+                $('input[type=submit]').val("Add User");
+                {% if request.user.profile.company.company_type == 'rater' %}
+                    $('#rater_info').hide();
+                {% endif %}
+                $('#misc_info').hide();
+            }
         });
     </script>
 {% endblock %}
