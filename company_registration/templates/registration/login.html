@@ -1,5 +1,10 @@
 {% extends "registration/registration_base.html" %}
-{% block title %}Login{% endblock %}
+
+{% block page_title %}
+    Log on to {{ site }}
+{% endblock %}
+
+
 {% block content %}
 
 {% if form.errors %}

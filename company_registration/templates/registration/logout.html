@@ -1,5 +1,7 @@
 {% extends "registration/registration_base.html" %}
-{% block title %}Logged out{% endblock %}
+{% block page_title %}
+    Logged out from {{ site }}!
+{% endblock %}
 {% block content %}
 Successfully logged out! &nbsp;<a href='{% url login %}'>Log back in.</a>
 {% endblock %}
