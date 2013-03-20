@@ -117,23 +117,37 @@
 
         <div class="span-18 last" id="misc_info">
             <hr/>
-            <div class="span-3">Department
-                {% if form.department.field.required %}
-                    <span class="special_class">*</span>
-                {% endif %}
+            <div class="span-9">
+                <div class="span-3">Department
+                    {% if form.department.field.required %}
+                        <span class="special_class">*</span>
+                    {% endif %}
+                </div>
+                <div class="span-6 last">{{ form.department }}</div>
+
+                <div class="span-3">Cell Phone
+                    {% if form.cell_phone.field.required %}
+                        <span class="special_class">*</span>
+                    {% endif %}
+                </div>
+                <div class="span-6 last">{{ form.cell_phone }}</div>
             </div>
-            <div class="span-15 last">{{ form.department }}</div>
+            <div class="span-9 last">
+                <div class="span-3">
+                    {% if request.user.is_superuser %}Company Administrator
+                        {% if form.is_company_admin.field.required %}
+                            <span class="special_class">*</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="span-6 last">{{ form.is_company_admin }}</div>
+            </div>
             {% if form.department.errors %}
                 <div class="span-18 last">{{ form.department.errors }}</div>{% endif %}
-
-            <div class="span-3">Cell Phone
-                {% if form.cell_phone.field.required %}
-                    <span class="special_class">*</span>
-                {% endif %}
-            </div>
-            <div class="span-15 last">{{ form.cell_phone }}</div>
             {% if form.cell_phone.errors %}
                 <div class="span-18 last">{{ form.cell_phone.errors }}</div>{% endif %}
+            {% if form.is_company_admin.errors %}
+                <div class="span-18 last">{{ form.is_company_admin.errors }}</div>{% endif %}
         </div>
 
         <div class="span-18 last">&nbsp;</div>
@@ -149,7 +163,8 @@
         $(document).ready(function() {
             $("#id_company").change(function () {
                 var company_id = $('#id_company :selected').val();
-                if ( company_id == {{ request.user.company.id }} ) {
+                if ( company_id == {{ request.user.company.id }} ||
+                        {% if request.user.is_superuser %} true {% else %} false {% endif %}) {
                     $('input[type=submit]').val("Send Registration Email");
                     {% if request.user.profile.company.company_type == 'rater' %}
                         $('#rater_info').show();
@@ -164,18 +179,9 @@
                 }
             });
             var company_id = $('#id_company :selected').val();
-            if ( company_id == {{ request.user.company.id }} ) {
-                $('input[type=submit]').val("Send Registration Email");
-                {% if request.user.profile.company.company_type == 'rater' %}
-                    $('#rater_info').show();
-                {% endif %}
-                $('#misc_info').show();
-            } else {
-                $('input[type=submit]').val("Add User");
-                {% if request.user.profile.company.company_type == 'rater' %}
-                    $('#rater_info').hide();
-                {% endif %}
-                $('#misc_info').hide();
+            if (company_id != {{ request.user.company.id }} ) {
+                console.log("Initializing based on non-company ", company_id);
+                $('#id_company :selected').trigger("change");
             }
         });
     </script>

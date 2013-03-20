@@ -34,7 +34,8 @@ class CompanyRegistrationForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('first_name', 'last_name', 'email', 'title', 'work_phone', 'department',
-                  'cell_phone', 'photo', 'is_public', 'rater_role', 'rater_id', 'twitter_id')
+                  'cell_phone', 'photo', 'is_public', 'rater_role', 'rater_id', 'twitter_id',
+                  'is_company_admin')
         exclude= ('user', 'username', 'alt_companies', 'is_active')
 
     def clean_email(self):

@@ -26,7 +26,7 @@ class RegistrationManager(models.Manager):
         new_user = self._get_new_inactive_user(**kwargs)
         registration_profile = self._create_registration_profile(new_user)
         kwargs['user'] = new_user
-        if kwargs.get('send_email', True) and new_user.userprofile.company.is_active:
+        if kwargs.get('send_email', True):
             registration_profile.send_activation_email(**kwargs)
         return new_user
 
