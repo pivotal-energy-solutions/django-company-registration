@@ -48,7 +48,7 @@ class Register(FormView):
 
     def get_form_kwargs(self):
         kwargs = super(Register, self).get_form_kwargs()
-        comps = Company.objects.filter(is_active=True)
+        comps = Company.objects.filter(is_customer=True, is_active=True)
         if not self.request.user.is_superuser:
             comps = Company.objects.filter_by_company(self.request.user.company, include_self=True)
             comps = comps.filter(
@@ -78,9 +78,9 @@ class Register(FormView):
         form.cleaned_data['send_email'] = False
         is_super = self.request.user.is_superuser
         is_allowed = form.cleaned_data['company'].id == self.request.user.company.id or is_super
-        if is_allowed and form.cleaned_data['company'].is_active:
+        can_send = form.cleaned_data['company'].is_customer and form.cleaned_data['company'].is_active
+        if is_allowed and can_send:
             form.cleaned_data['send_email'] = True
-
         RegistrationProfile.objects.create_inactive_user(**form.cleaned_data)
         return HttpResponseRedirect(self.get_success_url(form.cleaned_data.get('company')))
 
