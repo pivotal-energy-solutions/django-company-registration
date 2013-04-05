@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
-from apps.generics.decorators import permission_required_with_403
+from apps.core.decorators import permission_required_with_403
 from .forms import CompanyRegistrationForm, SetPasswordFormTOS
 from .models import RegistrationProfile
 from company_registration import get_site
