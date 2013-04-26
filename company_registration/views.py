@@ -133,4 +133,4 @@ class PasswordSetTOS(FormView):
 
     def get_success_url(self):
         """Return them to update their profile"""
-        return reverse('profile_detail', kwargs={'pk': self.request.user.userprofile.id})
+        return reverse('profile:detail', kwargs={'pk': self.request.user.userprofile.id})
