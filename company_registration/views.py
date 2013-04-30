@@ -56,12 +56,6 @@ class Register(FormView):
         kwargs['company_qs'] = comps
         return kwargs
 
-    def get_form(self, form_class):
-        form = super(Register, self).get_form(form_class)
-        if not self.request.user.is_superuser:
-            form.fields['is_company_admin'].widget = forms.HiddenInput()
-        return form
-
     def get_success_url(self, company=None):
 
         if company.id == self.request.user.company.id:
@@ -81,6 +75,8 @@ class Register(FormView):
         can_send = form.cleaned_data['company'].is_customer and form.cleaned_data['company'].is_active
         if is_allowed and can_send:
             form.cleaned_data['send_email'] = True
+        if not is_allowed: # You can only create admins for your own company..
+            form.cleaned_data['is_company_admin'] = False
         RegistrationProfile.objects.create_inactive_user(**form.cleaned_data)
         return HttpResponseRedirect(self.get_success_url(form.cleaned_data.get('company')))
 
