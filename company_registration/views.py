@@ -60,7 +60,7 @@ class Register(FormView):
 
         if company.id == self.request.user.company.id:
             return reverse("registration_complete")
-        return reverse('company:view', kwargs={'type': company.company_type, 'pk': company.id})
+        return company.get_absolute_url()
 
     def form_valid(self, form):
         # activate user...
