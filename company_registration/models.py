@@ -19,6 +19,7 @@ __credits__ = ['Steven Klass', ]
 
 log = logging.getLogger(__name__)
 
+
 class RegistrationProfile(models.Model):
     ACTIVATED = u"ALREADY_ACTIVATED"
     activation_subject_template_name = "registration/activation_email_subject.txt"
