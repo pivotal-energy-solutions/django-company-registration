@@ -1,7 +1,7 @@
 {% extends "registration/registration_base.html" %}
 {% block page_title %}Activation complete{% endblock %}
 {% block content %}
-Thanks, activation complete!  You may now <a href='{% url login %}'>login</a> using the username and
+Thanks, activation complete!  You may now <a href="{% url 'auth:login' %}">login</a> using the username and
     password you set at registration.
 {% endblock %}
 

@@ -3,5 +3,5 @@
     Logged out from {{ site }}!
 {% endblock %}
 {% block content %}
-Successfully logged out! &nbsp;<a href='{% url login %}'>Log back in.</a>
+Successfully logged out! &nbsp;<a href="{% url 'auth:login' %}">Log back in.</a>
 {% endblock %}
