@@ -149,13 +149,14 @@ class CompanyRegistrationTests(TestCase):
         self.failIf(new_user.is_active)
 
         # Details of the returned user must match what went in.
-        self.assertEqual(new_user.userprofile.company, user.company)
-        self.assertEqual(new_user.userprofile.title, data['title'])
-        self.assertEqual(new_user.userprofile.department, data['department'])
-        self.assertEqual(new_user.userprofile.work_phone, data['work_phone'])
-        self.assertEqual(new_user.userprofile.cell_phone, data['cell_phone'])
-        self.assertEqual(new_user.userprofile.is_company_admin, False)
-        self.assertEqual(new_user.userprofile.is_public, False)
+        profile = new_user.get_profile
+        self.assertEqual(profile.company, user.company)
+        self.assertEqual(profile.title, data['title'])
+        self.assertEqual(profile.department, data['department'])
+        self.assertEqual(profile.work_phone, data['work_phone'])
+        self.assertEqual(profile.cell_phone, data['cell_phone'])
+        self.assertEqual(profile.is_company_admin, False)
+        self.assertEqual(profile.is_public, False)
 
         # Verify we got the success redirect url
         self.assertEqual(response.status_code, 302)

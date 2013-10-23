@@ -3,6 +3,7 @@
 
 import logging
 import datetime
+from dateutil.tz import tzlocal
 from django.core.mail import EmailMultiAlternatives, mail_managers
 from django.db import models
 from django.conf import settings
@@ -36,8 +37,9 @@ class RegistrationProfile(models.Model):
 
     def activation_key_expired(self):
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
+        summed_date = self.user.date_joined + expiration_date
         return self.activation_key == self.ACTIVATED or \
-               (self.user.date_joined + expiration_date <= datetime.datetime.now())
+               (summed_date <= datetime.datetime.now(tzlocal()))
 
     def send_activation_email(self, **kwargs):
 

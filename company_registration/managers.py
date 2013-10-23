@@ -74,13 +74,14 @@ class RegistrationManager(models.Manager):
         user_registered.send(sender=self.__class__, user=new_user,
                              request=kwargs.pop('request', None))
 
-        profile = new_user.get_profile()
-        profile.company = kwargs.get('company')
-        for key, value in kwargs.items():
-            if key in ['email', 'first_name', 'last_name']:
-                continue
-            setattr(profile, key, value)
-        profile.save()
+        profile = new_user.get_profile
+        if profile and hasattr(profile, 'company'):
+            profile.company = kwargs.get('company')
+            for key, value in kwargs.items():
+                if key in ['email', 'first_name', 'last_name']:
+                    continue
+                setattr(profile, key, value)
+            profile.save()
         return new_user
 
     def _create_registration_profile(self, user):
