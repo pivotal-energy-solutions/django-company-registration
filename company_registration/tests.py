@@ -149,7 +149,7 @@ class CompanyRegistrationTests(TestCase):
         self.failIf(new_user.is_active)
 
         # Details of the returned user must match what went in.
-        profile = new_user.get_profile
+        profile = new_user.get_profile()
         self.assertEqual(profile.company, user.company)
         self.assertEqual(profile.title, data['title'])
         self.assertEqual(profile.department, data['department'])
