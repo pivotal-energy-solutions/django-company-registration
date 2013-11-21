@@ -9,6 +9,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import password_change
 from django.db.models import Q
 from django import forms
+from django.forms import HiddenInput
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -55,6 +56,12 @@ class Register(FormView):
                 Q(is_customer=False, is_active=True) | Q(id=self.request.user.company.id))
         kwargs['company_qs'] = comps
         return kwargs
+
+    def get_form(self, form_class):
+        form = super(Register, self).get_form(form_class)
+        if not self.request.user.is_superuser:
+            form.fields['is_company_admin'].widget = HiddenInput()
+        return form
 
     def get_success_url(self, company=None):
 
