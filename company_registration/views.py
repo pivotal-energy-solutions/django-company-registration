@@ -59,7 +59,8 @@ class Register(FormView):
 
     def get_form(self, form_class):
         form = super(Register, self).get_form(form_class)
-        if not self.request.user.is_superuser:
+        is_admin = self.request.user.is_superuser or self.request.user.profile.is_company_admin
+        if not is_admin:
             form.fields['is_company_admin'].widget = HiddenInput()
         return form
 
