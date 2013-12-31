@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """tasks.py: Django company_registration"""
 
+from __future__ import unicode_literals
+
 import logging
 from celery.schedules import crontab
 from celery.task.base import periodic_task

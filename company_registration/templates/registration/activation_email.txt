@@ -1,4 +1,3 @@
-{% load url from future %}
 
 Welcome to {{ site.name }}!
 

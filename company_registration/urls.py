@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """urls.py: Django """
 
+from __future__ import unicode_literals
+
 import logging
 from django.conf.urls import patterns, url
 from company_registration import views

@@ -1,4 +1,7 @@
-# -*- coding: utf-8 -*-"""signals.py: Django company_registration"""
+# -*- coding: utf-8 -*-
+"""signals.py: Django company_registration"""
+
+from __future__ import unicode_literals
 
 import logging
 from django.dispatch import Signal

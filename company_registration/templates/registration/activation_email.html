@@ -1,5 +1,4 @@
 {% extends "html_email_base.html" %}
-{% load url from future %}
 
 {% block content %}
     <h4>Welcome to {{ site.name }}!</h4>
@@ -20,16 +19,15 @@
         next {{ expiration_days }} days:<br />
 
         <div style="text-align: center">
-            <a href="http{% if is_secure %}s{% endif %}://{{site.domain}}{% url "registration_activate" activation_key=activation_key %}">
+            <a href='http{% if is_secure %}s{% endif %}://{{site.domain}}{% url "registration_activate" activation_key=activation_key %}'>
             <strong>Click Here</strong></a>
         </div>
 
     <p>
         Once you activate your account you will log into Axis using your email address {{ user.email}}.
     </p>
+    <br />
 
-
-    </p>
     <p>Sincerely,<br><br>
         <em>The Axis Support Team</em>
     </p>

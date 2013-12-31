@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """managers.py: Django company_registration"""
 
+from __future__ import unicode_literals
+
 import logging
 import random
 from hashlib import sha1

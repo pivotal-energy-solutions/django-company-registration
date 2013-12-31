@@ -1,4 +1,8 @@
-# -*- coding: utf-8 -*-"""tests.py: Django company_registration"""
+# -*- coding: utf-8 -*-
+"""tests.py: Django company_registration"""
+
+from __future__ import unicode_literals
+
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
@@ -238,12 +242,12 @@ class CompanyRegistrationTests(TestCase):
 
         data = {'new_password1': 'swordfish', 'new_password2': 'swordfish'}
         response = self.client.post(reverse('password_set'), data=data)
-        self.assertFormError(response, 'form', field='tos', errors=[u'This field is required.'])
+        self.assertFormError(response, 'form', field='tos', errors=['This field is required.'])
 
         data = {'new_password1': 'swordfish1', 'new_password2': 'swordfish', 'tos': 'checked'}
         response = self.client.post(reverse('password_set'), data=data)
         self.assertFormError(response, 'form', field='new_password2',
-                             errors=[u'The two password fields didn\'t match.'])
+                             errors=['The two password fields didn\'t match.'])
 
         data = {'new_password1': 'swordfish', 'new_password2': 'swordfish', 'tos': 'checked'}
         response = self.client.post(reverse('password_set'), data=data)

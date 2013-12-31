@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """models.py: Django registration"""
 
+from __future__ import unicode_literals
+
 import logging
 import datetime
 from dateutil.tz import tzlocal
@@ -22,7 +24,7 @@ log = logging.getLogger(__name__)
 
 
 class RegistrationProfile(models.Model):
-    ACTIVATED = u"ALREADY_ACTIVATED"
+    ACTIVATED = "ALREADY_ACTIVATED"
     activation_subject_template_name = "registration/activation_email_subject.txt"
     activation_text_template_name = "registration/activation_email.txt"
     activation_html_template_name = "registration/activation_email.html"
@@ -33,7 +35,7 @@ class RegistrationProfile(models.Model):
     objects = RegistrationManager()
 
     def __unicode__(self):
-        return u"Registration information for %s" % self.user
+        return "Registration information for %s" % self.user
 
     def activation_key_expired(self):
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)

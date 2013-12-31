@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """views.py: Django registration"""
 
+from __future__ import unicode_literals
+
 import logging
 from django.contrib import messages
 from django.contrib.auth import login
@@ -132,7 +134,7 @@ class PasswordSetTOS(FormView):
         """Save the password then give the user permissions"""
         form.save()
         self.request.user.profile.save()
-        messages.success(self.request, u'Your password has been set and permissions have been set!')
+        messages.success(self.request, 'Your password has been set and permissions have been set!')
         return super(PasswordSetTOS, self).form_valid(form)
 
     def get_success_url(self):

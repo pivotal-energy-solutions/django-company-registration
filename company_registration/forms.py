@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """forms.py: Django company_registration"""
 
+from __future__ import unicode_literals
+
 import logging
 from django import forms
 from django.contrib.auth.forms import SetPasswordForm, AuthenticationForm
@@ -60,7 +62,7 @@ class SetPasswordFormTOS(SetPasswordForm):
     new_password1 = PasswordField(label=_("New password"))
     new_password1 = PasswordField(label=_("New password confirmation"))
     tos = forms.BooleanField(widget=forms.CheckboxInput(),
-                             label=_(u'I have read and agree to the Terms of Service'),
+                             label=_('I have read and agree to the Terms of Service'),
                              required=True)
 
     def clean_tos(self):
@@ -70,5 +72,5 @@ class SetPasswordFormTOS(SetPasswordForm):
         """
         if self.cleaned_data.get('tos', False):
             return self.cleaned_data['tos']
-        raise forms.ValidationError(_(u'You must agree to the terms to register'))
+        raise forms.ValidationError(_('You must agree to the terms to register'))
 
