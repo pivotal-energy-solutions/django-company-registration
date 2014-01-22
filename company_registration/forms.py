@@ -4,13 +4,19 @@
 from __future__ import unicode_literals
 
 import logging
+
 from django import forms
 from django.contrib.auth.forms import SetPasswordForm, AuthenticationForm
-from django.contrib.auth.models import User
-from passwords.fields import PasswordField
-from apps.company.models import Company
-from apps.core.models import UserProfile
 from django.utils.translation import ugettext_lazy as _
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:
+    from django.contrib.auth.models import User as _AuthUser
+    get_user_model = lambda: _AuthUser
+
+from passwords.fields import PasswordField
+
+from apps.company.models import Company
 
 __author__ = 'Steven Klass'
 __date__ = '4/3/12 9:01 PM'
@@ -21,11 +27,7 @@ log = logging.getLogger(__name__)
 
 
 class CompanyRegistrationForm(forms.ModelForm):
-
-    email = forms.EmailField(widget=forms.TextInput(), required=True)
     company = forms.ModelChoiceField(queryset=Company.objects.none())
-    first_name = forms.CharField(label="First Name",help_text='', required=True)
-    last_name = forms.CharField(label="Last Name",help_text='', required=True)
     twitter_id = forms.CharField(label="Twitter", help_text='', required=False)
 
     def __init__(self, *args, **kwargs):
@@ -34,14 +36,15 @@ class CompanyRegistrationForm(forms.ModelForm):
         self.fields['company'].queryset = company_qs
 
     class Meta:
-        model = UserProfile
+        model = get_user_model()
         fields = ('first_name', 'last_name', 'email', 'title', 'work_phone', 'department',
-                  'cell_phone', 'photo', 'is_public', 'rater_role', 'rater_id', 'twitter_id',
+                  'cell_phone', 'is_public', 'rater_role', 'rater_id', 'twitter_id',
                   'is_company_admin')
         exclude= ('user', 'username', 'alt_companies', 'is_active')
 
     def clean_email(self):
         """Validate that the email address is not already in use."""
+        User = get_user_model()
         try:
             if User.objects.filter(email__iexact=self.cleaned_data['email']).count() >= 1:
                 raise forms.ValidationError(_("A user with that email address is not available"))

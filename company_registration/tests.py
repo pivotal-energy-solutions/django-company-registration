@@ -3,29 +3,33 @@
 
 from __future__ import unicode_literals
 
-from django.contrib import admin
-from django.contrib.sites.models import Site
-
 import re
 import logging
 import datetime
+
 from django.conf import settings
+from django.contrib import admin
 from django.contrib.auth import login
+from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.http import HttpRequest
-from django.test.client import Client
 from django.test import TestCase
+from django.test.client import Client
 from django.utils.importlib import import_module
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:
+    from django.contrib.auth.models import _AuthUser
+    get_user_model = lambda: _AuthUser
 
 from apps.company.models import Company
 
-from admin import RegistrationAdmin
-from signals import user_activated, user_registered
-from managers import RegistrationManager
-from models import RegistrationProfile
+from .admin import RegistrationAdmin
+from .signals import user_activated, user_registered
+from .managers import RegistrationManager
+from .models import RegistrationProfile
 
 __author__ = 'Steven Klass'
 __date__ = '12/10/12 12:17 PM'
@@ -33,7 +37,6 @@ __copyright__ = 'Copyright 2012-2013 Pivotal Energy Solutions. All rights reserv
 __credits__ = ['Steven Klass', ]
 
 log = logging.getLogger(__name__)
-
 
 class CompanyRegistrationClient(Client):
     """This allows use to override the login.  Only to separate out the activate from the setting
@@ -46,7 +49,7 @@ class CompanyRegistrationClient(Client):
         Returns True if login is possible; False if the user is inactive,
          or if the sessions framework is not available.
         """
-        user = User.objects.get(username=username)
+        user = get_user_model().objects.get(username=username)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         if user and user.is_active \
                 and 'django.contrib.sessions' in settings.INSTALLED_APPS:
@@ -124,7 +127,7 @@ class CompanyRegistrationTests(TestCase):
         email.
 
         """
-        user = User.objects.get(id=1)
+        user = get_user_model().objects.get(id=1)
         self.client.login(username=user.username, password='pass')
 
         url = reverse('registration_register')
@@ -185,7 +188,7 @@ class CompanyRegistrationTests(TestCase):
         url = reverse('registration_activate', kwargs={'activation_key': profile.activation_key})
         response = self.client.get(url)
 
-        activated = User.objects.get(email=data['email'])
+        activated = get_user_model().objects.get(email=data['email'])
         self.assertEqual(activated.username, profile.user.username)
         self.failUnless(activated.is_active)
 
@@ -276,7 +279,7 @@ class CompanyRegistrationTests(TestCase):
         received_signals = []
         user_registered.connect(receiver, sender=RegistrationManager)
 
-        user = User.objects.get(id=1)
+        user = get_user_model().objects.get(id=1)
 
         data = {'first_name': 'Alice', 'last_name': 'LastName',
                 'title': 'Title', 'work_phone': '123-456-7890',
@@ -339,7 +342,7 @@ class CompanyRegistrationTests(TestCase):
         new_user = RegistrationProfile.objects.create_inactive_user(**data)
         profile = RegistrationProfile.objects.get(user=new_user)
 
-        new_user = User.objects.get(email=data['email'])
+        new_user = get_user_model().objects.get(email=data['email'])
         new_user.date_joined -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
         new_user.save()
 
@@ -401,4 +404,4 @@ class CompanyRegistrationTests(TestCase):
         profile = RegistrationProfile.objects.get(user=new_user)
 
         admin_class.activate_users(WSGIRequest, RegistrationProfile.objects.all())
-        self.failUnless(User.objects.get(email=data['email']).is_active)
+        self.failUnless(get_user_model().objects.get(email=data['email']).is_active)

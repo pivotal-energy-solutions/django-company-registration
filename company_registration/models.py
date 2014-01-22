@@ -5,14 +5,17 @@ from __future__ import unicode_literals
 
 import logging
 import datetime
-from dateutil.tz import tzlocal
+import sys
+
+
 from django.core.mail import EmailMultiAlternatives, mail_managers
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.template.loader import render_to_string
-import sys
-from managers import RegistrationManager
+
+from dateutil.tz import tzlocal
+
+from .managers import RegistrationManager
 
 
 __author__ = 'Steven Klass'
@@ -29,7 +32,7 @@ class RegistrationProfile(models.Model):
     activation_text_template_name = "registration/activation_email.txt"
     activation_html_template_name = "registration/activation_email.html"
 
-    user = models.ForeignKey(User, unique=True, related_name="registration_profiles")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True, related_name="registration_profiles")
     activation_key = models.CharField(max_length=40)
 
     objects = RegistrationManager()
