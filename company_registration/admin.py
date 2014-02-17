@@ -5,11 +5,10 @@ from __future__ import unicode_literals
 
 import logging
 from django.contrib import admin
-from django.contrib.sites.models import RequestSite
-from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 
-from models import RegistrationProfile
+from .models import RegistrationProfile
+from . import get_site
 
 __author__ = 'Steven Klass'
 __date__ = '12/11/12 10:48 AM'
@@ -35,7 +34,7 @@ class RegistrationAdmin(admin.ModelAdmin):
             RegistrationProfile.objects.activate_user(profile.activation_key)
     activate_users.short_description = _("Activate users")
 
-    def resend_activation_email(self, request, queryset, get_site=None):
+    def resend_activation_email(self, request, queryset, **kwargs):
         """
         Re-sends activation emails for the selected users.
 
@@ -45,15 +44,14 @@ class RegistrationAdmin(admin.ModelAdmin):
         activated.
 
         """
-        if Site._meta.installed:
-            site = Site.objects.get_current()
-        else:
-            site = RequestSite(request)
+        site, request_site = get_site(request)
 
         for profile in queryset:
             if not profile.activation_key_expired():
                 kwargs = {}
-                kwargs['site'] = site
+                kwargs['site'] = site  # FIXME: I think this is discarded when Sites context processor overwrites it
+                kwargs['site_name'] = site.name
+                kwargs['request_site'] = request_site
                 kwargs['is_secure'] = request.is_secure()
                 kwargs['requesting_user'] = request.user
                 kwargs['request'] = request

@@ -74,7 +74,11 @@ class Register(FormView):
 
     def form_valid(self, form):
         # activate user...
-        form.cleaned_data['site'] = get_site(self.request)
+        site, request_site = get_site(self.request)
+
+        form.cleaned_data['site'] = site
+        form.cleaned_data['site_name'] = site.name
+        form.cleaned_data['request_site'] = request_site
         form.cleaned_data['is_secure'] = self.request.is_secure()
         form.cleaned_data['requesting_user'] = self.request.user
         form.cleaned_data['request'] = self.request
