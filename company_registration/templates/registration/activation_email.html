@@ -1,16 +1,16 @@
 {% extends "html_email_base.html" %}
 
 {% block content %}
-    <h4>Welcome to {{ site.name }}!</h4>
+    <h4>Welcome to {{ site_name }}!</h4>
 
     <p>
         This automated email message is being sent to you on behalf of your
-        <a href="http{% if is_secure %}s{% endif %}://{{site.domain}}/">Axis</a> company administrator
+        <a href="http{% if is_secure %}s{% endif %}://{{ request_site.domain }}/">Axis</a> company administrator
         {{ requesting_user.get_full_name }}, who has initiated the registration process to add an
         account for you on
-        <a href="http{% if is_secure %}s{% endif %}://{{site.domain}}/">{{ site.name }}</a>. If you
+        <a href="http{% if is_secure %}s{% endif %}://{{ request_site.domain }}/">{{ site_name }}</a>. If you
         believe that you have received this email in error, simply ignore this email or contact
-        <strong>{{requesting_user.first_name}}</strong> at {{ requesting_user.profile.work_phone}}
+        <strong>{{ requesting_user.first_name }}</strong> at {{ requesting_user.profile.work_phone }}
         for clarification.
     </p>
 
@@ -19,12 +19,12 @@
         next {{ expiration_days }} days:<br />
 
         <div style="text-align: center">
-            <a href='http{% if is_secure %}s{% endif %}://{{site.domain}}{% url "registration_activate" activation_key=activation_key %}'>
+            <a href='http{% if is_secure %}s{% endif %}://{{ site.domain }}{% url "registration_activate" activation_key=activation_key %}'>
             <strong>Click Here</strong></a>
         </div>
 
     <p>
-        Once you activate your account you will log into Axis using your email address {{ user.email}}.
+        Once you activate your account you will log into Axis using your email address {{ user.email }}.
     </p>
     <br />
 

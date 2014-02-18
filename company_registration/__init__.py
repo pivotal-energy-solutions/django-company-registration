@@ -11,14 +11,14 @@ __license__ = 'See the file LICENSE.txt for licensing information.'
 
 from django.contrib.sites import models as site_models
 
-
 def get_version():
     return __version__
 
 
 def get_site(request):
+    request_site = site_models.RequestSite(request)
     if site_models.Site._meta.installed:
-        site = site_models.Site.objects.get_current()
+        site = site_models.Site.objects.get(domain=request_site.domain)
     else:
-        site = site_models.RequestSite(request)
-    return site
+        site = request_site
+    return site, request_site
