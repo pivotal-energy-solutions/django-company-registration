@@ -18,6 +18,8 @@ from passwords.fields import PasswordField
 
 from apps.company.models import Company
 
+from . import strings
+
 __author__ = 'Steven Klass'
 __date__ = '4/3/12 9:01 PM'
 __copyright__ = 'Copyright 2012-2013 Pivotal Energy Solutions. All rights reserved.'
@@ -34,6 +36,28 @@ class CompanyRegistrationForm(forms.ModelForm):
         company_qs = kwargs.pop('company_qs', Company.objects.none())
         super(CompanyRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['company'].queryset = company_qs
+
+        # Setting help text and label here because UserProfile model is used in many places,
+        #  and the same help text does not apply in all those places.
+        self.fields['company'].help_text = strings.COMPANY_REGISTRATION_FORM_COMPANY
+        self.fields['first_name'].help_text = strings.COMPANY_REGISTRATION_FORM_FIRST_NAME
+        self.fields['last_name'].help_text = strings.COMPANY_REGISTRATION_FORM_LAST_NAME
+        self.fields['email'].help_text = strings.COMPANY_REGISTRATION_FORM_EMAIL
+        self.fields['work_phone'].help_text = strings.COMPANY_REGISTRATION_FORM_WORK_PHONE
+        self.fields['cell_phone'].help_text = strings.COMPANY_REGISTRATION_FORM_CELL_PHONE
+        self.fields['title'].help_text = strings.COMPANY_REGISTRATION_FORM_TITLE
+        self.fields['department'].help_text = strings.COMPANY_REGISTRATION_FORM_DEPARTMENT
+        self.fields['rater_role'].help_text = strings.COMPANY_REGISTRATION_FORM_RATER_ROLE
+        self.fields['rater_id'].help_text = strings.COMPANY_REGISTRATION_FORM_RATER_ID
+        self.fields['is_company_admin'].help_text = strings.COMPANY_REGISTRATION_FORM_IS_COMPANY_ADMIN
+
+        self.fields['company'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_COMPANY
+        self.fields['email'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_EMAIL
+        self.fields['work_phone'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_WORK_PHONE
+        self.fields['cell_phone'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_CELL_PHONE
+        self.fields['rater_id'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_RATER_ID
+        self.fields['is_company_admin'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_IS_COMPANY_ADMIN
+
 
     class Meta:
         model = get_user_model()
