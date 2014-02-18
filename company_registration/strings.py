@@ -1,0 +1,20 @@
+# -*- coding: utf-8 -*-
+
+COMPANY_REGISTRATION_FORM_COMPANY = """Select the company user or contact works for."""
+COMPANY_REGISTRATION_FORM_FIRST_NAME = """Enter the first name of the user/contact."""
+COMPANY_REGISTRATION_FORM_LAST_NAME = """Enter the last name of the user/contact."""
+COMPANY_REGISTRATION_FORM_EMAIL = """Enter the email address of the user/contact."""
+COMPANY_REGISTRATION_FORM_WORK_PHONE = """Enter user/contact's work phone number in the format XXX-XXX-XXXX."""
+COMPANY_REGISTRATION_FORM_CELL_PHONE = """Enter the user/contact's mobile phone number in the format XXX-XXX-XXXX."""
+COMPANY_REGISTRATION_FORM_TITLE = """Enter the title of the user/contact."""
+COMPANY_REGISTRATION_FORM_DEPARTMENT = """Enter the department name of the user/contact (if applicable)."""
+COMPANY_REGISTRATION_FORM_RATER_ROLE = """If the user/contact is a Rater, select the role."""
+COMPANY_REGISTRATION_FORM_RATER_ID = """If the user/contact is a Rater, enter the RESNET Rater ID number."""
+COMPANY_REGISTRATION_FORM_IS_COMPANY_ADMIN = """Click the selection box if the user is to be an Axis administrator for your company.  Axis administrators have additional add/edit priveledges that general Axis users do not have."""
+
+COMPANY_REGISTRATION_FORM_VERBOSE_NAME_COMPANY = """Company Name"""
+COMPANY_REGISTRATION_FORM_VERBOSE_NAME_EMAIL = """Email Address"""
+COMPANY_REGISTRATION_FORM_VERBOSE_NAME_WORK_PHONE = """Work Phone Number"""
+COMPANY_REGISTRATION_FORM_VERBOSE_NAME_CELL_PHONE = """Mobile Phone Number"""
+COMPANY_REGISTRATION_FORM_VERBOSE_NAME_RATER_ID = """Rater ID"""
+COMPANY_REGISTRATION_FORM_VERBOSE_NAME_IS_COMPANY_ADMIN = """Is Company Admin"""
