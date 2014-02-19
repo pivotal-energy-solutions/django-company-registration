@@ -18,7 +18,11 @@ def get_version():
 def get_site(request):
     request_site = site_models.RequestSite(request)
     if site_models.Site._meta.installed:
-        site = site_models.Site.objects.get(domain=request_site.domain)
+        try:
+            site = site_models.Site.objects.get(domain=request_site.domain)
+        except site_models.Site.DoesNotExist:
+            # No Site matches the actual domain we're on; site.name will probably be wrong.
+            site = site_models.Site.objects.get_current()
     else:
         site = request_site
     return site, request_site
