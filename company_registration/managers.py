@@ -9,6 +9,7 @@ from hashlib import sha1
 
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.conf import settings
 try:
     from django.contrib.auth import get_user_model
 except ImportError:
@@ -16,6 +17,9 @@ except ImportError:
     get_user_model = lambda: _AuthUser
 
 from .signals import user_registered, user_activated
+
+# TODO: REMOVE ME
+IS_LEGACY = settings.AUTH_USER_MODEL == 'auth.User':
 
 __author__ = 'Steven Klass'
 __date__ = '12/10/12 1:38 PM'
@@ -79,6 +83,17 @@ class RegistrationManager(models.Manager):
 
         user_registered.send(sender=self.__class__, user=new_user,
                              request=kwargs.pop('request', None))
+
+        if IS_LEGACY
+            profile = new_user.get_profile()
+            if profile and hasattr(profile, 'company'):
+                profile.company = kwargs.get('company')
+                for key, value in kwargs.items():
+                    if key in ['email', 'first_name', 'last_name']:
+                        continue
+                    setattr(profile, key, value)
+                profile.save()
+
         return new_user
 
     def _create_registration_profile(self, user):

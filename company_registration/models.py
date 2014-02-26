@@ -7,7 +7,6 @@ import logging
 import datetime
 import sys
 
-
 from django.core.mail import EmailMultiAlternatives, mail_managers
 from django.db import models
 from django.conf import settings
