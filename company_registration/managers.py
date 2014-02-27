@@ -19,7 +19,7 @@ except ImportError:
 from .signals import user_registered, user_activated
 
 # TODO: REMOVE ME
-IS_LEGACY = settings.AUTH_USER_MODEL == 'auth.User':
+IS_LEGACY = settings.AUTH_USER_MODEL == 'auth.User'
 
 __author__ = 'Steven Klass'
 __date__ = '12/10/12 1:38 PM'
