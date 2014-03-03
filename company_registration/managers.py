@@ -74,9 +74,19 @@ class RegistrationManager(models.Manager):
             if not User.objects.filter(username=username).count():
                 break
             users += 1
-        new_user, create = User.objects.get_or_create(
-            email=kwargs.get('email'),
-            defaults=dict(kwargs, username=username, is_active=False))
+        if IS_LEGACY:
+            lkwargs = kwargs.copy()
+            for key in lkwargs.keys():
+                if key not in ['username', 'first_name', 'last_name', 'email', 'is_staff']:
+                    lkwargs.pop(key)
+            new_user, create = User.objects.get_or_create(
+                email=kwargs.get('email'),
+                defaults=dict(lkwargs, username=username, is_active=False))
+        else:
+            new_user, create = User.objects.get_or_create(
+                email=kwargs.get('email'),
+                defaults=dict(kwargs, username=username, is_active=False))
+
         new_user.set_unusable_password()
         new_user.groups.add(kwargs.get('company').group)
         new_user.save()
