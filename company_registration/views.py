@@ -137,7 +137,6 @@ class PasswordSetTOS(FormView):
     def form_valid(self, form):
         """Save the password then give the user permissions"""
         form.save()
-        self.request.user.profile.save()
         messages.success(self.request, 'Your password has been set and permissions have been set!')
         return super(PasswordSetTOS, self).form_valid(form)
 
