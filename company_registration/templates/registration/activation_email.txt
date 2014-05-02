@@ -4,7 +4,7 @@ Welcome to {{ site_name }}!
 This automated email message is being sent to you on behalf of you Axis company administrator
 {{ requesting_user.get_full_name }}, who has initiated the registration process to add an account for you on
 {{ site_name }}.  If you believe that you have received this email in error, simply ignore
-this email or contact {{ requesting_user.first_name }} at {{ requesting_user.profile.work_phone }} for clarification.
+this email or contact {{ requesting_user.first_name }} at {{ requesting_user.work_phone }} for clarification.
 
 You may log into Axis using your email address ({{ user.email }}).
 
