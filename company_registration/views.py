@@ -39,7 +39,7 @@ class Register(FormView):
     form_class = CompanyRegistrationForm
 
     @method_decorator(login_required)
-    @method_decorator(permission_required_with_403('auth.add_user'))
+    @method_decorator(permission_required_with_403('core.add_user'))
     def dispatch(self, *args, **kwargs):
         """Ensure we have access"""
         return super(Register, self).dispatch(*args, **kwargs)
