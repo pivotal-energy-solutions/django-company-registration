@@ -82,7 +82,9 @@ class RegistrationManager(models.Manager):
                 lkwargs.pop(key)
 
         new_user, create = User.objects.get_or_create(
-            email=kwargs.get('email'),
+            first_name=kwargs.get('first_name'),
+            last_name=kwargs.get('last_name'),
+            company=kwargs.get('company'),
             defaults=dict(lkwargs, username=username, is_active=False))
 
         new_user.set_unusable_password()
