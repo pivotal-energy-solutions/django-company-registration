@@ -80,6 +80,22 @@ class CompanyRegistrationForm(forms.ModelForm):
             fields += ('photo',)
         exclude= ('user', 'username', 'alt_companies', 'is_active')
 
+    def clean(self):
+        """Validate that an user does not already exist for the same company."""
+        cleaned_data = super(CompanyRegistrationForm, self).clean()
+        User = get_user_model()
+
+        first = cleaned_data['first_name']
+        last = cleaned_data['last_name']
+        comp = cleaned_data['company']
+        count = User.objects.filter(first_name=first, last_name=last, company=comp).count()
+        if count >= 1:
+            raise forms.ValidationError(
+                _("A user named {} {} already works for company {}".format(
+                    first, last, comp.__unicode__())))
+
+        return cleaned_data
+
 
 class SetPasswordFormTOS(SetPasswordForm):
     """
