@@ -80,6 +80,16 @@ class CompanyRegistrationForm(forms.ModelForm):
             fields += ('photo',)
         exclude= ('user', 'username', 'alt_companies', 'is_active')
 
+    def clean_email(self):
+        """Validate that the email address is not already in use."""
+        User = get_user_model()
+        try:
+            if User.objects.filter(email__iexact=self.cleaned_data['email']).count() >= 1:
+                raise forms.ValidationError(_("A user with that email address is not available"))
+        except User.DoesNotExist:
+            pass
+        return self.cleaned_data['email']
+
     def clean(self):
         """Validate that an user does not already exist for the same company."""
         cleaned_data = super(CompanyRegistrationForm, self).clean()
