@@ -62,7 +62,8 @@ class RegistrationManager(models.Manager):
             if profile.activation_key_expired():
                 user = profile.user
                 if not user.is_active:
-                    user.delete()
+                    user.set_unusable_password()
+                profile.delete()
 
     def _get_new_inactive_user(self, **kwargs):
         """Create a new inactive user with a profile"""
