@@ -20,8 +20,6 @@ from passwords.fields import PasswordField
 from apps.company.models import Company
 from . import strings
 
-# TODO: REMOVE ME
-IS_LEGACY = settings.AUTH_USER_MODEL == 'auth.User'
 
 __author__ = 'Steven Klass'
 __date__ = '4/3/12 9:01 PM'
@@ -33,12 +31,7 @@ log = logging.getLogger(__name__)
 
 class CompanyRegistrationForm(forms.ModelForm):
     company = forms.ModelChoiceField(queryset=Company.objects.none())
-    twitter_id = forms.CharField(label="Twitter", help_text='', required=False)
-
-    if IS_LEGACY:
-        email = forms.EmailField(widget=forms.TextInput(), required=True)
-        first_name = forms.CharField(label="First Name",help_text='', required=True)
-        last_name = forms.CharField(label="Last Name",help_text='', required=True)
+    send_registration_email = forms.BooleanField(help_text=strings.SEND_REGISTRATION, required=False, initial=True)
 
     def __init__(self, *args, **kwargs):
         company_qs = kwargs.pop('company_qs', Company.objects.none())
@@ -68,16 +61,9 @@ class CompanyRegistrationForm(forms.ModelForm):
 
 
     class Meta:
-        if IS_LEGACY:
-            from apps.core.models import UserProfile
-            model = UserProfile
-        else:
-            model = get_user_model()
+        model = get_user_model()
         fields = ('first_name', 'last_name', 'email', 'title', 'work_phone', 'department',
-                  'cell_phone', 'is_public', 'rater_role', 'rater_id', 'twitter_id',
-                  'is_company_admin')
-        if IS_LEGACY:
-            fields += ('photo',)
+                  'cell_phone', 'is_public', 'rater_role', 'rater_id', 'is_company_admin')
         exclude= ('user', 'username', 'alt_companies', 'is_active')
 
     def clean_email(self):

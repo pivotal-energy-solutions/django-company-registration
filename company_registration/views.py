@@ -66,9 +66,9 @@ class Register(FormView):
             form.fields['is_company_admin'].widget = HiddenInput()
         return form
 
-    def get_success_url(self, company=None):
+    def get_success_url(self, company=None, registration_sent=False):
 
-        if company.id == self.request.user.company.id:
+        if registration_sent:
             return reverse("registration_complete")
         return reverse('company:view', kwargs={'type': company.company_type, 'pk': company.id})
 
@@ -83,16 +83,17 @@ class Register(FormView):
         form.cleaned_data['requesting_user'] = self.request.user
         form.cleaned_data['request'] = self.request
 
-        form.cleaned_data['send_email'] = False
         is_super = self.request.user.is_superuser
         is_allowed = form.cleaned_data['company'].id == self.request.user.company.id or is_super
         can_send = form.cleaned_data['company'].is_customer and form.cleaned_data['company'].is_active
-        if is_allowed and can_send:
-            form.cleaned_data['send_email'] = True
-        if not is_allowed: # You can only create admins for your own company..
-            form.cleaned_data['is_company_admin'] = False
+
+        if not (is_allowed or can_send):
+            form.cleaned_data['send_registration_email'] = False
+
         RegistrationProfile.objects.create_inactive_user(**form.cleaned_data)
-        return HttpResponseRedirect(self.get_success_url(form.cleaned_data.get('company')))
+        return HttpResponseRedirect(self.get_success_url(
+            form.cleaned_data.get('company'),
+            form.cleaned_data.get('send_registration_email')))
 
 class RegistrationComplete(TemplateView):
     template_name = 'registration/registration_complete.html'
