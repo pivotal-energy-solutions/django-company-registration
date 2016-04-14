@@ -18,6 +18,11 @@
         To set your password and activate your account, please click the following link within the
         next {{ expiration_days }} days:<br />
 
+        Please note: Upon clicking the link you will be prompted to set a password and accept the Terms of Service
+        (a copy of which can be found <a href="http://pivotalenergy.net/license">Here</a>). If you leave this page
+        without setting your password your activation key will become invalid.
+        Please contact a support representative for a new activation key.<br/>
+
         <div style="text-align: center">
             <a href='http{% if is_secure %}s{% endif %}://{{ site.domain }}{% url "registration_activate" activation_key=activation_key %}'>
             <strong>Click Here</strong></a>
