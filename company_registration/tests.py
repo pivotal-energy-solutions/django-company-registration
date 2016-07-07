@@ -24,7 +24,7 @@ except ImportError:
     from django.contrib.auth.models import _AuthUser
     get_user_model = lambda: _AuthUser
 
-from apps.company.models import Company
+from axis.company.models import Company
 
 from .admin import RegistrationAdmin
 from .signals import user_activated, user_registered

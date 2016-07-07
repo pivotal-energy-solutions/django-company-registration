@@ -17,7 +17,7 @@ except ImportError:
 
 from passwords.fields import PasswordField
 
-from apps.company.models import Company
+from axis.company.models import Company
 from . import strings
 
 
