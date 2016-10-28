@@ -52,12 +52,12 @@ class Register(FormView):
     def get_form_kwargs(self):
         kwargs = super(Register, self).get_form_kwargs()
         if self.request.user.is_superuser:
-            comp_qs = Company.objects.filter(is_active=True)
+            comps = Company.objects.filter(is_active=True)
         else:
-            comp_qs = Company.objects.filter_by_company(self.request.user.company, include_self=True)
-            comp_qs = comp_qs.filter(Q(is_customer=False, is_active=True) | Q(id=self.request.user.company.id))
+            comps = Company.objects.filter_by_company(self.request.user.company, include_self=True)
+            comps = comps.filter(Q(is_customer=False, is_active=True) | Q(id=self.request.user.company.id))
 
-        kwargs['company_qs'] = comps_qs
+        kwargs['company_qs'] = comps
         return kwargs
 
     def get_form(self, form_class):
