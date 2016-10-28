@@ -55,7 +55,8 @@ class Register(FormView):
             comps = Company.objects.filter(is_active=True)
         else:
             comps = Company.objects.filter_by_company(self.request.user.company, include_self=True)
-            comps = comps.filter(Q(is_customer=False, is_active=True) | Q(id=self.request.user.company.id))
+            comps = comps.filter(
+                Q(is_customer=False, is_active=True) | Q(id=self.request.user.company.id))
 
         kwargs['company_qs'] = comps
         return kwargs
