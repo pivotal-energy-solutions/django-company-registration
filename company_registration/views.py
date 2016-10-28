@@ -51,11 +51,13 @@ class Register(FormView):
 
     def get_form_kwargs(self):
         kwargs = super(Register, self).get_form_kwargs()
-        comps = Company.objects.filter(is_customer=True, is_active=True)
-        if not self.request.user.is_superuser:
+        if self.request.user.is_superuser:
+            comps = Company.objects.filter(is_active=True)
+        else:
             comps = Company.objects.filter_by_company(self.request.user.company, include_self=True)
             comps = comps.filter(
                 Q(is_customer=False, is_active=True) | Q(id=self.request.user.company.id))
+
         kwargs['company_qs'] = comps
         return kwargs
 
