@@ -61,7 +61,7 @@ class Register(FormView):
         kwargs['company_qs'] = comps
         return kwargs
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=CompanyRegistrationForm):
         form = super(Register, self).get_form(form_class)
         is_admin = self.request.user.is_superuser or self.request.user.is_company_admin
         if not is_admin:
@@ -131,7 +131,7 @@ class PasswordSetTOS(FormView):
         """Ensure we have access"""
         return super(PasswordSetTOS, self).dispatch(*args, **kwargs)
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=SetPasswordFormTOS):
         """
         Returns an instance of the form to be used in this view.
         """
