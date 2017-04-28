@@ -16,7 +16,7 @@ __credits__ = ['Steven Klass', ]
 
 log = logging.getLogger(__name__)
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^register/$', views.Register.as_view(),
         name='registration_register'),
     url(r'^register/complete/$', views.RegistrationComplete.as_view(),
@@ -26,4 +26,4 @@ urlpatterns = patterns('',
     url(r'^activate/(?P<activation_key>\w+)/$', views.Activate.as_view(),
         name='registration_activate'),
     url(r'^password_set/$', PasswordSetTOS.as_view(), name='password_set'),
-)
+]
