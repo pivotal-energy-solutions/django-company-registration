@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 
 import logging
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from company_registration import views
 from company_registration.views import PasswordSetTOS
 
