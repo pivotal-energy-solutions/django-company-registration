@@ -31,7 +31,8 @@ class RegistrationProfile(models.Model):
     activation_text_template_name = "registration/activation_email.txt"
     activation_html_template_name = "registration/activation_email.html"
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True,  related_name="registration_profiles")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True, on_delete=models.CASCADE,
+                             related_name="registration_profiles")
     activation_key = models.CharField(max_length=40)
 
     objects = RegistrationManager()
