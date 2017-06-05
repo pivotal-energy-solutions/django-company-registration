@@ -4,8 +4,8 @@
 from __future__ import unicode_literals
 
 import logging
-from celery.schedules import crontab
-from celery.task.base import periodic_task
+
+from celery import shared_task
 from company_registration.models import RegistrationProfile
 from django.conf import settings
 
@@ -17,7 +17,7 @@ __credits__ = ['Steven Klass', ]
 
 log = logging.getLogger(__name__)
 
-@periodic_task(run_every=crontab(hour="2", minute="20", day_of_week="*"))
+@shared_task
 def clear_expired_registrations(**kwargs):
     """
     Crontab to clear expired registrations
