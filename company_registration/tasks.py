@@ -23,6 +23,5 @@ def clear_expired_registrations(**kwargs):
     Crontab to clear expired registrations
     :param kwargs: Not Unsed
     """
-    kwargs['log'] = clear_expired_registrations.get_logger()
     kwargs['loglevel'] = logging.DEBUG if getattr(settings, 'DEBUG', False) else logging.ERROR
     return RegistrationProfile.objects.delete_expired_users()
