@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import logging
 
 from django import forms
+from django.db.models import Q
 from django.contrib.auth.forms import SetPasswordForm, AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -34,8 +35,25 @@ class CompanyRegistrationForm(forms.ModelForm):
     send_registration_email = forms.BooleanField(help_text=strings.SEND_REGISTRATION, required=False, initial=True)
 
     def __init__(self, *args, **kwargs):
-        company_qs = kwargs.pop('company_qs', Company.objects.none())
+        self.user = kwargs.pop('user', None)
+
+        kwargs.setdefault('initial', {}).update({
+            'company': self.user.company,
+        })
+
         super(CompanyRegistrationForm, self).__init__(*args, **kwargs)
+
+        self.setup_fields()
+
+    def setup_fields(self):
+        if self.user.is_superuser:
+            company_qs = Company.objects.filter(is_active=True)
+        else:
+            is_active = Q(is_customer=False, is_active=True)
+            is_self = Q(id=self.user.company.id)
+            company_qs = Company.objects.filter_by_company(self.user.company, include_self=True) \
+                                        .filter(is_active | is_self)
+
         self.fields['company'].queryset = company_qs
 
         # Setting help text and label here because UserProfile model is used in many places,
@@ -59,6 +77,8 @@ class CompanyRegistrationForm(forms.ModelForm):
         self.fields['rater_id'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_RATER_ID
         self.fields['is_company_admin'].label = strings.COMPANY_REGISTRATION_FORM_VERBOSE_NAME_IS_COMPANY_ADMIN
 
+        if not self.user.is_superuser and not self.user.is_company_admin:
+            del self.fields['is_company_admin']
 
     class Meta:
         model = get_user_model()

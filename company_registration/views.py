@@ -9,7 +9,6 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import password_change
-from django.db.models import Q
 from django import forms
 from django.forms import HiddenInput
 from django.http import HttpResponseRedirect
@@ -22,9 +21,8 @@ from django.core.urlresolvers import reverse
 from apps.core.decorators import permission_required_with_403
 from .forms import CompanyRegistrationForm, SetPasswordFormTOS
 from .models import RegistrationProfile
-from company_registration import get_site
+from . import get_site
 
-from apps.company.models import Company
 
 __author__ = 'Steven Klass'
 __date__ = '4/3/12 9:01 PM'
@@ -39,34 +37,15 @@ class Register(FormView):
     form_class = CompanyRegistrationForm
 
     @method_decorator(login_required)
-    @method_decorator(permission_required_with_403('core.add_user'))
+    # @method_decorator(permission_required_with_403('core.add_user'))
     def dispatch(self, *args, **kwargs):
         """Ensure we have access"""
         return super(Register, self).dispatch(*args, **kwargs)
 
-    def get_initial(self):
-        initial = super(Register, self).get_initial()
-        initial['company'] = self.request.user.company
-        return initial
-
     def get_form_kwargs(self):
         kwargs = super(Register, self).get_form_kwargs()
-        if self.request.user.is_superuser:
-            comps = Company.objects.filter(is_active=True)
-        else:
-            comps = Company.objects.filter_by_company(self.request.user.company, include_self=True)
-            comps = comps.filter(
-                Q(is_customer=False, is_active=True) | Q(id=self.request.user.company.id))
-
-        kwargs['company_qs'] = comps
+        kwargs['user'] = self.request.user
         return kwargs
-
-    def get_form(self, form_class=CompanyRegistrationForm):
-        form = super(Register, self).get_form(form_class)
-        is_admin = self.request.user.is_superuser or self.request.user.is_company_admin
-        if not is_admin:
-            form.fields['is_company_admin'].widget = HiddenInput()
-        return form
 
     def get_success_url(self, company=None, registration_sent=False):
 
