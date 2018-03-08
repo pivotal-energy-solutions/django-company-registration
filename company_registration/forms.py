@@ -63,7 +63,7 @@ class CompanyRegistrationForm(forms.ModelForm):
         self.fields['company'].queryset = company_qs
 
         # Setting help text and label here because UserProfile model is used in many places,
-        #  and the same help text does not apply in all those places.
+        # and the same help text does not apply in all those places.
         self.fields['company'].help_text = strings.COMPANY_REGISTRATION_FORM_COMPANY
         self.fields['first_name'].help_text = strings.COMPANY_REGISTRATION_FORM_FIRST_NAME
         self.fields['last_name'].help_text = strings.COMPANY_REGISTRATION_FORM_LAST_NAME
@@ -109,7 +109,7 @@ class CompanyRegistrationForm(forms.ModelForm):
         if count >= 1:
             raise forms.ValidationError(
                 _("A user named {} {} already works for company {}".format(
-                    first, last, comp.__unicode__())))
+                    first, last, company)))
 
         return cleaned_data
 
