@@ -99,11 +99,14 @@ class CompanyRegistrationForm(forms.ModelForm):
         cleaned_data = super(CompanyRegistrationForm, self).clean()
         User = get_user_model()
 
-        first = cleaned_data['first_name']
-        last = cleaned_data['last_name']
-        comp = cleaned_data['company']
-        count = User.objects.filter(first_name=first, last_name=last, company=comp).count()
-        if count >= 1:
+        first = cleaned_data.get('first_name')
+        last = cleaned_data.get('last_name')
+        company = cleaned_data.get('company')
+
+        if not all([first, last, company]):
+            return cleaned_data
+
+        if User.objects.filter(first_name=first, last_name=last, company=company).exists():
             raise forms.ValidationError(
                 _("A user named {} {} already works for company {}".format(
                     first, last, company)))
