@@ -34,6 +34,12 @@ class CompanyRegistrationForm(forms.ModelForm):
     company = forms.ModelChoiceField(queryset=Company.objects.none())
     send_registration_email = forms.BooleanField(help_text=strings.SEND_REGISTRATION, required=False, initial=True)
 
+    class Meta:
+        model = get_user_model()
+        fields = ('first_name', 'last_name', 'email', 'title', 'work_phone', 'department',
+                  'cell_phone', 'is_public', 'rater_role', 'rater_id', 'is_company_admin',
+                  'company', 'send_registration_email')
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
 
@@ -80,11 +86,6 @@ class CompanyRegistrationForm(forms.ModelForm):
         if not self.user.is_superuser and not self.user.is_company_admin:
             del self.fields['is_company_admin']
 
-    class Meta:
-        model = get_user_model()
-        fields = ('first_name', 'last_name', 'email', 'title', 'work_phone', 'department',
-                  'cell_phone', 'is_public', 'rater_role', 'rater_id', 'is_company_admin')
-        exclude= ('user', 'username', 'alt_companies', 'is_active')
 
     def clean_email(self):
         """Validate that the email address is not already in use."""
