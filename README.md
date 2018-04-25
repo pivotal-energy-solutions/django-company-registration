@@ -1,4 +1,4 @@
-#Django Company Registration *(django-company-registration)*
+# Django Company Registration *(django-company-registration)*
 ----------------------------
 
 ## Description
