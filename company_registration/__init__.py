@@ -3,7 +3,7 @@
 
 __name__ = 'company_registration'
 __author__ = 'Pivotal Energy Solutions'
-__version_info__ = (1, 0, 0)
+__version_info__ = (1, 1, 1)
 __version__ = '.'.join(map(str, __version_info__))
 __date__ = '3/28/12 12:55 PM'
 __copyright__ = 'Copyright 2012-2013 Pivotal Energy Solutions. All rights reserved.'
