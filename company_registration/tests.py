@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import re
 import logging
 import datetime
+from importlib import import_module
 
 from django.conf import settings
 from django.contrib import admin
@@ -13,11 +14,11 @@ from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.handlers.wsgi import WSGIRequest
-from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test import TestCase
 from django.test.client import Client
-from django.utils.importlib import import_module
+from django.urls import reverse
+
 try:
     from django.contrib.auth import get_user_model
 except ImportError:
