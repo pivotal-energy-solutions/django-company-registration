@@ -5,10 +5,10 @@
 
     <p>
         This automated email message is being sent to you on behalf of your
-        <a href="http{% if is_secure %}s{% endif %}://{{ request_site.domain }}/">Axis</a> company administrator
+        <a href="http{% if is_secure %}s{% endif %}://{{ request_site }}/">Axis</a> company administrator
         {{ requesting_user.get_full_name }}, who has initiated the registration process to add an
         account for you on
-        <a href="http{% if is_secure %}s{% endif %}://{{ request_site.domain }}/">{{ site_name }}</a>. If you
+        <a href="http{% if is_secure %}s{% endif %}://{{ request_site }}/">{{ site_name }}</a>. If you
         believe that you have received this email in error, simply ignore this email or contact
         <strong>{{ requesting_user.first_name }}</strong> at {{ requesting_user.work_phone }}
         for clarification.

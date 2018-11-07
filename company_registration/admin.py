@@ -6,9 +6,9 @@ from __future__ import unicode_literals
 import logging
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.sites.shortcuts import get_current_site
 
 from .models import RegistrationProfile
-from . import get_site
 
 __author__ = 'Steven Klass'
 __date__ = '12/11/12 10:48 AM'
@@ -44,7 +44,8 @@ class RegistrationAdmin(admin.ModelAdmin):
         activated.
 
         """
-        site, request_site = get_site(request)
+        site = get_current_site(request)
+        request_site = request.META.get('HTTP_HOST')
 
         for profile in queryset:
             if not profile.activation_key_expired():

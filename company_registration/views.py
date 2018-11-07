@@ -8,9 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import password_change
-from django import forms
-from django.forms import HiddenInput
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -18,10 +16,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
-from apps.core.decorators import permission_required_with_403
 from .forms import CompanyRegistrationForm, SetPasswordFormTOS
 from .models import RegistrationProfile
-from . import get_site
 
 
 __author__ = 'Steven Klass'
@@ -55,7 +51,8 @@ class Register(FormView):
 
     def form_valid(self, form):
         # activate user...
-        site, request_site = get_site(self.request)
+        site = get_current_site(self.request)
+        request_site = self.request.META.get('HTTP_HOST')
 
         form.cleaned_data['site'] = site
         form.cleaned_data['site_name'] = site.name
