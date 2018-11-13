@@ -21,7 +21,10 @@ from django.test.client import Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from apps.company.models import Company
+try:
+    from axis.company.models import Company
+except:
+    from apps.company.models import Company
 
 from .admin import RegistrationAdmin
 from .signals import user_activated, user_registered
